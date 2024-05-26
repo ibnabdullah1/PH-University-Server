@@ -16,7 +16,7 @@ const createStudent = async (
       message: 'Student is Created successfully',
       data: result,
     })
-  } catch (err: any) {
+  } catch (err) {
     next(err)
   }
 }
