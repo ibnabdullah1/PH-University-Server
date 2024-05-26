@@ -1,6 +1,7 @@
 import cors from 'cors'
 import express, { Application, Request, Response } from 'express'
 import { globalErrorHandler } from './app/middleware/globalErrorHandeler'
+import notFound from './app/middleware/notFound'
 import { StudentRoutes } from './app/modules/student/student.route'
 import { UserRoutes } from './app/modules/user/user.route'
 
@@ -18,5 +19,6 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.use(globalErrorHandler)
+app.use(notFound)
 
 export default app
