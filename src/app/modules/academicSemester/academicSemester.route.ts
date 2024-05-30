@@ -1,28 +1,15 @@
-export type TMonths =
-  | 'January'
-  | 'February'
-  | 'March'
-  | 'April'
-  | 'May'
-  | 'June'
-  | 'July'
-  | 'August'
-  | 'September'
-  | 'October'
-  | 'November'
-  | 'December'
+import express from 'express'
+import { validateRequest } from '../../middleware/validateRequest'
+import { AcademicSemesterControllers } from './academicSemester.controller'
+import { academicSemesterValidation } from './academicSemester.validation'
+const router = express.Router()
 
-export type TAcademicSemesterName = 'Autumn' | 'Summar' | 'Fall'
-export type TAcademicSemesterCode = '01' | '02' | '03'
+router.post(
+  '/create-semester',
+  validateRequest(
+    academicSemesterValidation.createAcademicSemesterValidationSchema,
+  ),
+  AcademicSemesterControllers.createAcademicSemester,
+)
 
-export type TAcademicSemester = {
-  name: TAcademicSemesterName
-  code: TAcademicSemesterCode
-  year: string
-  startMonth: TMonths
-  endMonth: TMonths
-}
-
-export type TAcademicSemesterNameCodeMapper = {
-  [key: string]: string
-}
+export const AcademicSemesterRoutes = router
