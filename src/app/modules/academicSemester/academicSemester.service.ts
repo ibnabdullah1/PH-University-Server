@@ -18,12 +18,12 @@ const getAllAcademicSemesterIntoDB = async () => {
   const result = await AcademicSemester.find()
   return result
 }
-const getSingleAcademicSemesterIntoDB = async (id: string) => {
-  const result = await AcademicSemester.findById({ _id: id })
+const getSingleAcademicSemesterIntoDB = async (semesterId: string) => {
+  const result = await AcademicSemester.findById({ _id: semesterId })
   return result
 }
 const updateAcademicSemesterIntoDB = async (
-  id: string,
+  semesterId: string,
   payload: Partial<TAcademicSemester>,
 ) => {
   if (
@@ -35,7 +35,7 @@ const updateAcademicSemesterIntoDB = async (
   }
 
   const result = await AcademicSemester.findByIdAndUpdate(
-    { _id: id },
+    { _id: semesterId },
     payload,
     { new: true },
   )

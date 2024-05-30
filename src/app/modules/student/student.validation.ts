@@ -34,7 +34,7 @@ const createStudentValidationSchema = z.object({
     student: z.object({
       name: userNameValidationSchema,
       gender: z.enum(['male', 'female', 'other']),
-      dateOfBirth: z.date().optional(),
+      dateOfBirth: z.string().optional(),
       email: z.string().email('Invalid email address'),
       contactNumber: z.string(),
       emergencyContactNumber: z.string(),
@@ -45,7 +45,8 @@ const createStudentValidationSchema = z.object({
       permanentAddress: z.string(),
       guardian: guardianValidationSchema,
       localGuardian: localGuardianValidationSchema,
-      profileImage: z.string().optional(),
+      admissionSemester: z.string(),
+      profileImage: z.string(),
     }),
   }),
 })
