@@ -11,6 +11,7 @@ const academicFacultySchema = new Schema<TAcademicFaculty>(
   },
   {
     timestamps: true,
+    versionKey: false,
   },
 )
 
