@@ -1,10 +1,5 @@
-import { NextFunction, Request, Response } from 'express'
-const globalErrorHandler = (
-  err: any,
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+import { Request, Response } from 'express'
+const globalErrorHandler = (err: any, req: Request, res: Response) => {
   const statusCode = 500
   const message = err.message || 'Something went wrong!'
 
