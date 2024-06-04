@@ -2,17 +2,24 @@ import { TAcademicDepartment } from './academicDepartment.interface'
 import { AcademicDepartment } from './academicDepartment.model'
 
 const createAcademicDepartmentIntoDB = async (payload: TAcademicDepartment) => {
+  const isDepartmentExist = await AcademicDepartment.findOne({
+    name: payload.name,
+  })
+  if (isDepartmentExist) {
+    throw new Error('Department already exists')
+  }
   const result = await AcademicDepartment.create(payload)
   return result
 }
 
 const getAllAcademicDepartmentsFromDB = async () => {
-  const result = await AcademicDepartment.find()
+  const result = await AcademicDepartment.find().populate('academicFaculty')
   return result
 }
-// .populate('academicFaculty')
+
 const getSingleAcademicDepartmentFromDB = async (id: string) => {
-  const result = await AcademicDepartment.findById(id)
+  const result =
+    await AcademicDepartment.findById(id).populate('academicFaculty')
   return result
 }
 
