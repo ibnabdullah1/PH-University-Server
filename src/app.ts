@@ -12,10 +12,15 @@ app.use(cors())
 // Application Routes
 app.use('/api/v1', router)
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello world!')
-})
+// app.get('/', (req: Request, res: Response) => {
+//   res.send('Hello world!')
+// })
 
+const test = async (req: Request, res: Response) => {
+  Promise.reject()
+}
+
+app.get('/', test)
 app.use(globalErrorHandler)
 app.use(notFound)
 
