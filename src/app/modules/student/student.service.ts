@@ -8,8 +8,6 @@ import { TStudent } from './student.interface'
 import { Student } from './student.model'
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
-  const queryObj = { ...query }
-
   // {email:{$regex: query.searchTerm, $options:i}}
   // {presentAddress:{$regex: query.searchTerm, $options:i}}
   // {name.firstName:{$regex: query.searchTerm, $options:i}}
@@ -99,7 +97,7 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
 }
 
 const getSingleStudentFromDB = async (id: string) => {
-  const result = await Student.findOne({ id })
+  const result = await Student.findById(id)
     .populate('admissionSemester')
     .populate({
       path: 'academicDepartment',
@@ -140,7 +138,7 @@ const updateStudentFromDB = async (id: string, payload: Partial<TStudent>) => {
     }
   }
 
-  const result = await Student.findOneAndUpdate({ id }, modifiedUpdatedData, {
+  const result = await Student.findByIdAndUpdate(id, modifiedUpdatedData, {
     new: true,
     runValidators: true,
   })
@@ -152,17 +150,18 @@ const deleteStudentFromDB = async (id: string) => {
 
   try {
     session.startTransaction()
-    const deletedStudent = await Student.findOneAndUpdate(
-      { id },
+    const deletedStudent = await Student.findByIdAndUpdate(
+      id,
       { isDeleted: true },
       { new: true, session },
     )
     if (!deletedStudent) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete student')
     }
-
-    const deletedUser = await User.findOneAndUpdate(
-      { id },
+    // get user _id from deletedStudent
+    const userId = deletedStudent.user
+    const deletedUser = await User.findByIdAndUpdate(
+      userId,
       { isDeleted: true },
       { new: true, session },
     )
