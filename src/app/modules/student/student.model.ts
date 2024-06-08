@@ -133,7 +133,8 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     },
     isDeleted: { type: Boolean, default: false },
   },
-  { timestamps: true, versionKey: false },
+  { timestamps: true },
+  // { timestamps: true, versionKey: false },
 )
 
 // Query Middleware
