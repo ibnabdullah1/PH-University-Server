@@ -6,8 +6,8 @@ import { TStudent } from './student.interface'
 import { Student } from './student.model'
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
-  console.log('Base query ', query)
   const queryObj = { ...query }
+
   // {email:{$regex: query.searchTerm, $options:i}}
   // {presentAddress:{$regex: query.searchTerm, $options:i}}
   // {name.firstName:{$regex: query.searchTerm, $options:i}}
@@ -29,6 +29,7 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields']
   excludeFields.forEach((el) => delete queryObj[el]) // DELETING THE FIELDS SO THAT IT CAN'T MATCH OR FILTER EXACTLY
 
+  console.log({ query }, { queryObj })
   const filterQuery = searchQuery
     .find(queryObj)
     .populate('admissionSemester')
@@ -45,11 +46,21 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   }
 
   const sortedQuery = filterQuery.sort(sort)
+
+  let page = 1
   let limit = 1
+  let ship = 0
   if (query.limit) {
-    limit = query.limit as number
+    limit = Number(query.limit)
   }
-  const limitQuery = sortedQuery.limit(limit)
+  if (query.page) {
+    page = Number(query.page)
+    ship = Number((page - 1) * limit)
+  }
+
+  const paginateQuery = sortedQuery.skip(ship)
+
+  const limitQuery = paginateQuery.limit(limit)
   return limitQuery
 }
 
