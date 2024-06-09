@@ -9,7 +9,7 @@ const createCourse = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Course is created succesfully',
+    message: 'Course is created successfully',
     data: result,
   })
 })
@@ -32,7 +32,7 @@ const getSingleCourse = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Course is retrieved succesfully',
+    message: 'Course is retrieved successfully',
     data: result,
   })
 })
@@ -44,7 +44,7 @@ const updateCourse = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'course is updated succesfully',
+    message: 'course is updated successfully',
     data: result,
   })
 })
@@ -56,41 +56,7 @@ const deleteCourse = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Course is deleted succesfully',
-    data: result,
-  })
-})
-
-const assignFacultiesWithCourse = catchAsync(async (req, res) => {
-  const { courseId } = req.params
-  const { faculties } = req.body
-
-  const result = await CourseServices.assignFacultiesWithCourseIntoDB(
-    courseId,
-    faculties,
-  )
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Faculties assigned  succesfully',
-    data: result,
-  })
-})
-
-const removeFacultiesFromCourse = catchAsync(async (req, res) => {
-  const { courseId } = req.params
-  const { faculties } = req.body
-
-  const result = await CourseServices.removeFacultiesFromCourseFromDB(
-    courseId,
-    faculties,
-  )
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Faculties removed  succesfully',
+    message: 'Course is deleted successfully',
     data: result,
   })
 })
@@ -101,6 +67,4 @@ export const CourseControllers = {
   getAllCourses,
   updateCourse,
   deleteCourse,
-  assignFacultiesWithCourse,
-  removeFacultiesFromCourse,
 }
