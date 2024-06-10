@@ -3,6 +3,7 @@ import httpStatus from 'http-status'
 import QueryBuilder from '../../builder/QueryBuilder'
 import AppError from '../../errors/AppError'
 import { AcademicSemester } from '../academicSemester/academicSemester.model'
+import { RegistrationStatus } from './semesterRegistration.constant'
 import { TSemesterRegistration } from './semesterRegistration.interface'
 import { SemesterRegistration } from './semesterRegistration.model'
 
@@ -17,6 +18,21 @@ const createSemesterRegistrationIntoDB = async (
    */
 
   const academicSemester = payload.academicSemester
+  //check if there any registered semester that is already 'UPCOMING'|'ONGOING'
+  const isThereAnyUpcomingOrOngoingSEmester =
+    await SemesterRegistration.findOne({
+      $or: [
+        { status: RegistrationStatus.UPCOMING },
+        { status: RegistrationStatus.ONGOING },
+      ],
+    })
+
+  if (isThereAnyUpcomingOrOngoingSEmester) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `There is already an ${isThereAnyUpcomingOrOngoingSEmester.status} registered semester !`,
+    )
+  }
 
   // Check if the semester is already registered
   const isAcademicSemesterExist =
@@ -77,6 +93,21 @@ const updateSemesterRegistrationIntoDB = async (
    * UPCOMING --> ONGOING --> ENDED
    *
    */
+
+  // Check if the requested registered semester is exists
+  const isSemesterRegistrationExist = await SemesterRegistration.findById(id)
+  if (!isSemesterRegistrationExist) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This Semester is Not Found')
+  }
+
+  // If the requested semester registration is 'ENDED' , we will not update anything
+  const currentRequestedSemesterStatus = isSemesterRegistrationExist?.status
+  if (currentRequestedSemesterStatus === 'ENDED') {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      `This Semester is already ${currentRequestedSemesterStatus}`,
+    )
+  }
 }
 
 const deleteSemesterRegistrationFromDB = async (id: string) => {
