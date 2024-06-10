@@ -65,6 +65,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     throw new Error('Failed to create student')
   }
 }
+
 const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
   // create a user object
   const userData: Partial<TUser> = {}

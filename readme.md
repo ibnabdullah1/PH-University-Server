@@ -6,6 +6,11 @@ This project is a university management system designed to handle authentication
 
 This PH University application is built with Node.js, Express, TypeScript, Mongoose, MongoDB, Zod, and Validator for validation. The application allows for managing users and academic processes.
 
+## Entity-Relationship (ER) Diagram
+
+![Alt text](./ER_Diagram2.png)
+![Alt text](./Final.png)
+
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
@@ -29,7 +34,6 @@ Before you begin, ensure you have the following installed:
 - [ZOD](https://zod.dev/)
 
 ## Installation
-
 
 1. **Clone the repository:**
 
