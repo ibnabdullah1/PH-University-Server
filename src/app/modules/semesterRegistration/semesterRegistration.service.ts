@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import httpStatus from 'http-status'
 import QueryBuilder from '../../builder/QueryBuilder'
+import AppError from '../../errors/AppError'
+import { AcademicSemester } from '../academicSemester/academicSemester.model'
 import { TSemesterRegistration } from './semesterRegistration.interface'
 import { SemesterRegistration } from './semesterRegistration.model'
 
@@ -12,6 +15,28 @@ const createSemesterRegistrationIntoDB = async (
    * Step3: Check if the semester is already registered!
    * Step4: Create the semester registration
    */
+
+  const academicSemester = payload.academicSemester
+
+  // Check if the semester is already registered
+  const isAcademicSemesterExist =
+    await AcademicSemester.findById(academicSemester)
+  if (!isAcademicSemesterExist) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This Academic Semester not found')
+  }
+
+  //  Check if the semester is already registered!
+  const isSemesterRegistrationExist = await SemesterRegistration.findOne({
+    academicSemester,
+  })
+  if (isSemesterRegistrationExist) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      'This Semester is already registered',
+    )
+  }
+  const result = await SemesterRegistration.create(payload)
+  return result
 }
 
 const getAllSemesterRegistrationsFromDB = async (
@@ -31,7 +56,8 @@ const getAllSemesterRegistrationsFromDB = async (
 }
 
 const getSingleSemesterRegistrationsFromDB = async (id: string) => {
-  const result = await SemesterRegistration.findById(id)
+  const result =
+    await SemesterRegistration.findById(id).populate('academicSemester')
 
   return result
 }
